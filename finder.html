@@ -587,7 +587,7 @@
             <span class="badge">Educational use</span>
             <span class="badge">Doctor discussion summary</span>
           </div>
-          <p class="study-meta">This page queries live ClinicalTrials.gov study records through a Netlify Function and organizes the results in a patient-friendly format.</p>
+          <p class="study-meta">This page queries live ClinicalTrials.gov study records through a Vercel serverless function and organizes the results in a patient-friendly format.</p>
           <div class="mini-card">
             <strong style="display:block; color:var(--navy); margin-bottom:6px;">Location filtering</strong>
             <span style="color:var(--text-secondary);">Results are filtered using site state information listed in the study record.</span>
@@ -800,6 +800,7 @@
         const type = chip.dataset.type;
         const value = chip.dataset.value;
         const bucket = appState[type + 's'];
+
         if (bucket.has(value)) {
           bucket.delete(value);
           chip.classList.remove('active');
@@ -820,25 +821,32 @@
       appState.biomarkers.clear();
       appState.treatments.clear();
       appState.hasSearched = false;
+
       document.querySelectorAll('.chip').forEach(chip => chip.classList.remove('active'));
+
       activeFiltersEl.innerHTML = '';
       resultsListEl.innerHTML = '';
       resultsCountEl.textContent = '0';
+
       emptyStateEl.classList.remove('show');
       loadingStateEl.classList.remove('show');
       initialStateEl.style.display = 'block';
+
       emptyStateEl.querySelector('.section-title').textContent = 'No studies matched the filters you selected.';
       emptyStateEl.querySelector('.section-subtitle').textContent = 'Try removing one or more filters. Some studies may not list locations or treatment details the way you expect, and broader filters may show more options.';
     }
 
     function renderActiveFilters() {
       activeFiltersEl.innerHTML = '';
+
       if (!appState.hasSearched) return;
+
       const pills = [];
       if (cancerTypeEl.value) pills.push(cancerTypeEl.value);
       if (stateSelectEl.value) pills.push(stateSelectEl.value);
       [...appState.biomarkers].forEach(value => pills.push(value));
       [...appState.treatments].forEach(value => pills.push(value));
+
       pills.forEach(label => {
         const el = document.createElement('span');
         el.className = 'filter-pill';
@@ -849,6 +857,7 @@
 
     async function runSearch() {
       const cancerType = cancerTypeEl.value.trim();
+
       if (!cancerType) {
         alert('Please select a cancer type first.');
         return;
@@ -856,6 +865,7 @@
 
       appState.hasSearched = true;
       renderActiveFilters();
+
       initialStateEl.style.display = 'none';
       emptyStateEl.classList.remove('show');
       resultsListEl.innerHTML = '';
@@ -873,18 +883,17 @@
         });
 
         const response = await fetch(`/api/trials?${params.toString()}`);
+        const payload = await response.json();
 
-if (!response.ok) {
-  throw new Error("API failed");
-}
         if (!response.ok) {
-          throw new Error('Search request failed');
+          throw new Error(payload?.details || payload?.error || 'Search request failed');
         }
 
-        const payload = await response.json();
-        renderResults(payload.studies || []);
+        renderResults(Array.isArray(payload.studies) ? payload.studies : []);
       } catch (error) {
+        console.error('Finder search failed:', error);
         resultsListEl.innerHTML = '';
+        resultsCountEl.textContent = '0';
         emptyStateEl.classList.add('show');
         emptyStateEl.querySelector('.section-title').textContent = 'Unable to load live studies right now.';
         emptyStateEl.querySelector('.section-subtitle').textContent = 'Please try again in a moment. If the issue continues, there may be a temporary issue loading live data.';
@@ -896,20 +905,45 @@ if (!response.ok) {
     }
 
     function getDiscussionSummary(study) {
-      const locationsText = study.locations.length
-        ? study.locations.map(loc => `${loc.facility}${loc.city || loc.state ? ' — ' : ''}${[loc.city, loc.state].filter(Boolean).join(', ')}`).join('\n')
+      const locations = Array.isArray(study.locations) ? study.locations : [];
+
+      const locationsText = locations.length
+        ? locations
+            .map(loc => {
+              const place = [loc.city, loc.state, loc.country].filter(Boolean).join(', ');
+              return `${loc.facility}${place ? ' — ' + place : ''}`;
+            })
+            .join('\n')
         : 'Location information not listed in the study record.';
 
-      return `I found this study on My Trial Journey and would like to discuss with my doctor whether it may be relevant for me.\n\nStudy title: ${study.title}\nNCT ID: ${study.nct}\nPhase: ${study.phase}\nCondition: ${study.condition}\nStatus: ${study.status}\nRecruiting location(s):\n${locationsText}\nClinicalTrials.gov: ${study.url}\n\nMy Trial Journey is an educational tool and does not determine eligibility.`;
+      return `I found this study on My Trial Journey and would like to discuss with my doctor whether it may be relevant for me.
+
+Study title: ${study.title || 'N/A'}
+NCT ID: ${study.nct || 'N/A'}
+Phase: ${study.phase || 'N/A'}
+Condition: ${study.condition || 'N/A'}
+Status: ${study.status || 'N/A'}
+Sponsor: ${study.sponsor || 'N/A'}
+Recruiting location(s):
+${locationsText}
+ClinicalTrials.gov: ${study.url || '#'}
+
+My Trial Journey is an educational tool and does not determine eligibility.`;
     }
 
     function downloadSummary(study) {
-      const content = `My Trial Journey\nStudy discussion summary\n\n${getDiscussionSummary(study)}`;
+      const content = `My Trial Journey
+Study discussion summary
+
+${getDiscussionSummary(study)}`;
+
       const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
+
       link.href = url;
-      link.download = `${study.nct}_study_discussion_summary.txt`;
+      link.download = `${study.nct || 'study'}_discussion_summary.txt`;
+
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -921,41 +955,51 @@ if (!response.ok) {
       resultsListEl.innerHTML = '';
       resultsCountEl.textContent = studies.length;
       emptyStateEl.classList.toggle('show', studies.length === 0);
+
       if (!studies.length) return;
 
       studies.forEach(study => {
-        const visibleLocations = study.locations.slice(0, 4);
-        const hiddenCount = Math.max(0, study.locations.length - visibleLocations.length);
+        const locations = Array.isArray(study.locations) ? study.locations : [];
+        const visibleLocations = locations.slice(0, 4);
+        const hiddenCount = Math.max(0, locations.length - visibleLocations.length);
         const summaryText = getDiscussionSummary(study);
 
         const card = document.createElement('article');
         card.className = 'result-card';
+
         card.innerHTML = `
           <div class="study-header">
             <div>
-              <h3 class="study-title">${study.title}</h3>
+              <h3 class="study-title">${escapeHtml(study.title || 'Untitled study')}</h3>
               <div class="study-meta-grid">
-                <span class="meta-pill">${study.nct}</span>
-                <span class="meta-pill">${study.phase}</span>
-                <span class="meta-pill">${study.condition}</span>
-                <span class="meta-pill status-pill ${/recruiting/i.test(study.status) ? 'recruiting' : ''}">${study.status}</span>
+                <span class="meta-pill">${escapeHtml(study.nct || 'N/A')}</span>
+                <span class="meta-pill">${escapeHtml(study.phase || 'N/A')}</span>
+                <span class="meta-pill">${escapeHtml(study.condition || 'N/A')}</span>
+                <span class="meta-pill status-pill ${/recruiting/i.test(study.status || '') ? 'recruiting' : ''}">${escapeHtml(study.status || 'N/A')}</span>
               </div>
             </div>
           </div>
 
-          <p class="study-summary">${study.summary}</p>
+          <p class="study-summary">${escapeHtml(study.summary || 'This study record is available on ClinicalTrials.gov. Discuss with your doctor whether it may be relevant for your situation.')}</p>
 
           <div class="locations-block">
             <div class="locations-title">Site location(s) listed in the study record</div>
             <div class="locations-list">
-              ${visibleLocations.length ? visibleLocations.map(loc => `<div>${loc.facility}${loc.city || loc.state ? ' — ' : ''}${[loc.city, loc.state].filter(Boolean).join(', ')}</div>`).join('') : '<div>No location information listed.</div>'}
+              ${
+                visibleLocations.length
+                  ? visibleLocations.map(loc => {
+                      const place = [loc.city, loc.state, loc.country].filter(Boolean).join(', ');
+                      return `<div>${escapeHtml(loc.facility || 'Study site')}${place ? ' — ' + escapeHtml(place) : ''}</div>`;
+                    }).join('')
+                  : '<div>No location information listed.</div>'
+              }
               ${hiddenCount > 0 ? `<div>+${hiddenCount} more location${hiddenCount > 1 ? 's' : ''}</div>` : ''}
             </div>
           </div>
 
           <div class="actions-row">
             <button class="btn btn-primary discuss-btn" type="button">Prepare to discuss with your doctor</button>
-            <a class="btn btn-secondary" href="${study.url}" target="_blank" rel="noopener noreferrer">View on ClinicalTrials.gov</a>
+            <a class="btn btn-secondary" href="${escapeAttribute(study.url || '#')}" target="_blank" rel="noopener noreferrer">View on ClinicalTrials.gov</a>
           </div>
 
           <div class="discussion-panel">
@@ -976,6 +1020,7 @@ if (!response.ok) {
         card.querySelector('.discuss-btn').addEventListener('click', () => panel.classList.add('open'));
         card.querySelector('.close-btn').addEventListener('click', () => panel.classList.remove('open'));
         card.querySelector('.download-btn').addEventListener('click', () => downloadSummary(study));
+
         card.querySelector('.copy-btn').addEventListener('click', async () => {
           try {
             await navigator.clipboard.writeText(summaryText);
@@ -989,6 +1034,19 @@ if (!response.ok) {
 
         resultsListEl.appendChild(card);
       });
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function escapeAttribute(value) {
+      return escapeHtml(value);
     }
   </script>
 </body>
