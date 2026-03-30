@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Trial Journey | Explore Clinical Trials</title>
+  <meta name="description" content="Explore clinical trials in an educational way and prepare to discuss studies with your doctor." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:#123C66;
+      --navy-dark:#0d2f50;
+      --soft-blue:#EAF4FB;
+      --teal:#2C9FA3;
+      --warm-sand:#F6F1E8;
+      --text:#1F2A37;
+      --text-secondary:#6B7280;
+      --border:#D9E3EC;
+      --white:#FFFFFF;
+      --bg-light:#F9FBFD;
+      --shadow:0 8px 24px rgba(18,60,102,0.08);
+      --shadow-hover:0 12px 28px rgba(18,60,102,0.12);
+      --container:1200px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+      background: var(--white);
+    }
+    a { color: inherit; text-decoration: none; }
+    button, select { font: inherit; }
+    .container { width: min(var(--container), calc(100% - 32px)); margin: 0 auto; }
+    .section { padding: 88px 0; }
+    .section-soft { background: var(--soft-blue); }
+    .eyebrow {
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 32px;
+      line-height: 1.2;
+      color: var(--navy);
+      margin-bottom: 14px;
+    }
+    .section-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 780px;
+    }
+    .btn-group { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 24px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 16px;
+      border: 1px solid transparent;
+      transition: .25s ease;
+      cursor: pointer;
+    }
+    .btn-primary { background: var(--navy); color: var(--white); box-shadow: var(--shadow); }
+    .btn-primary:hover { background: var(--navy-dark); transform: translateY(-1px); box-shadow: var(--shadow-hover); }
+    .btn-secondary { background: var(--white); color: var(--navy); border-color: var(--navy); }
+    .btn-secondary:hover { background: var(--soft-blue); }
+    .btn-ghost { background: transparent; color: var(--navy); border-color: var(--border); }
+    .btn-ghost:hover { background: var(--bg-light); }
+
+    .header {
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(217,227,236,.8);
+      z-index: 20;
+    }
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 78px;
+      gap: 20px;
+    }
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 20px;
+    }
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--navy), var(--teal));
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      box-shadow: var(--shadow);
+    }
+    .links {
+      display: flex;
+      gap: 22px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .links a { font-size: 15px; font-weight: 500; color: var(--navy); }
+    .links a:hover { color: var(--teal); }
+
+    .hero {
+      padding: 76px 0;
+      background: linear-gradient(180deg, #fff 0%, #f7fbff 100%);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 34px;
+      align-items: center;
+    }
+    .hero h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 50px;
+      line-height: 1.12;
+      color: var(--navy);
+      max-width: 760px;
+    }
+    .hero p {
+      font-size: 19px;
+      color: var(--text-secondary);
+      margin-top: 16px;
+      max-width: 760px;
+    }
+    .microcopy {
+      margin-top: 14px;
+      font-size: 15px;
+      color: var(--text-secondary);
+      max-width: 760px;
+    }
+    .hero-preview {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 26px;
+      box-shadow: var(--shadow);
+    }
+    .hero-preview h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 24px;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+    .badge-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--soft-blue);
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .hero-preview .study-meta {
+      margin-top: 14px;
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+    .mini-card {
+      margin-top: 16px;
+      background: var(--bg-light);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin-top: 36px;
+    }
+    .step-card, .panel, .result-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .step-card h3, .panel h3, .result-card h3 {
+      font-family: 'Poppins', sans-serif;
+      color: var(--navy);
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+    .step-number {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: var(--navy);
+      color: var(--white);
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .finder-shell {
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr);
+      gap: 28px;
+      min-height: calc(100vh - 120px);
+      align-items: stretch;
+    }
+    .filter-column,
+    .results-column {
+      min-height: 0;
+      max-height: calc(100vh - 120px);
+      overflow: auto;
+      scrollbar-gutter: stable;
+      padding-right: 6px;
+    }
+    .filter-column::-webkit-scrollbar,
+    .results-column::-webkit-scrollbar {
+      width: 10px;
+    }
+    .filter-column::-webkit-scrollbar-thumb,
+    .results-column::-webkit-scrollbar-thumb {
+      background: #cfd9e4;
+      border-radius: 999px;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+
+    .filter-panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .filter-panel h3 {
+      font-family: 'Poppins', sans-serif;
+      color: var(--navy);
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    .field { margin-top: 18px; }
+    .field label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .field select {
+      width: 100%;
+      padding: 14px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--text);
+      appearance: none;
+      outline: none;
+    }
+    .field select:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(44,159,163,.12);
+    }
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .chip {
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s ease;
+      user-select: none;
+    }
+    .chip:hover { background: var(--bg-light); }
+    .chip.active {
+      background: var(--navy);
+      color: var(--white);
+      border-color: var(--navy);
+    }
+    .helper-text {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .disclaimer-box {
+      margin-top: 18px;
+      background: #F8FAFC;
+      border-left: 4px solid var(--teal);
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .active-filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .filter-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--soft-blue);
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .results-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .results-list {
+      display: grid;
+      gap: 20px;
+    }
+    .result-card { padding: 26px; }
+    .study-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: start;
+      flex-wrap: wrap;
+    }
+    .study-title {
+      font-family: 'Poppins', sans-serif;
+      color: var(--navy);
+      font-size: 26px;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+    .study-meta-grid {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .meta-pill {
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--bg-light);
+      border: 1px solid var(--border);
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .status-pill.recruiting {
+      background: rgba(44,159,163,.12);
+      border-color: rgba(44,159,163,.22);
+      color: var(--teal);
+    }
+    .study-summary {
+      margin-top: 16px;
+      color: var(--text-secondary);
+    }
+    .locations-block {
+      margin-top: 18px;
+      background: var(--bg-light);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .locations-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 8px;
+    }
+    .locations-list {
+      display: grid;
+      gap: 6px;
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+    .actions-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .discussion-panel {
+      display: none;
+      margin-top: 18px;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fbfe 100%);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+    }
+    .discussion-panel.open { display: block; }
+    .discussion-panel h4 {
+      font-family: 'Poppins', sans-serif;
+      color: var(--navy);
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+    .summary-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      font-size: 15px;
+      color: var(--text);
+      white-space: pre-line;
+    }
+    .summary-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .empty-state {
+      display: none;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 34px 26px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .empty-state.show { display: block; }
+    .location-note {
+      margin-top: 18px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .loading-state {
+      display: none;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 26px;
+      box-shadow: var(--shadow);
+      color: var(--text-secondary);
+    }
+    .loading-state.show { display: block; }
+    .initial-state {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 34px 28px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .footer {
+      background: var(--navy);
+      color: rgba(255,255,255,.92);
+      padding: 50px 0 24px;
+      margin-top: 88px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr 1fr;
+      gap: 28px;
+      margin-bottom: 26px;
+    }
+    .footer-title {
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+    .footer-links {
+      display: grid;
+      gap: 10px;
+    }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.12);
+      padding-top: 18px;
+      font-size: 13px;
+      color: rgba(255,255,255,.72);
+    }
+
+    @media (max-width: 1120px) {
+      .hero-grid,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .how-grid { grid-template-columns: repeat(3, 1fr); }
+      .hero h1 { font-size: 42px; }
+    }
+    @media (max-width: 860px) {
+      .how-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .finder-shell { grid-template-columns: 1fr; min-height: auto; }
+      .filter-column,
+      .results-column {
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+      }
+    }
+    @media (max-width: 760px) {
+      .container { width: min(var(--container), calc(100% - 24px)); }
+      .section { padding: 72px 0; }
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 14px 0;
+      }
+      .links { gap: 14px; }
+      .hero h1 { font-size: 34px; }
+      .hero p, .section-subtitle, .microcopy { font-size: 17px; }
+      .study-title { font-size: 22px; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container nav">
+      <a href="index.html" class="brand">
+        <span class="brand-mark">MTJ</span>
+        <span>My Trial Journey</span>
+      </a>
+      <nav class="links" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="learn.html">Learn</a>
+        <a href="app.html">App</a>
+        <a href="webinars.html">Webinars</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">Explore</span>
+          <h1>Explore clinical trials</h1>
+          <p>Browse clinical trials based on general characteristics and use the results to support conversations with your doctor.</p>
+          <p class="microcopy">My Trial Journey is an educational platform. This tool does not determine eligibility or provide medical advice.</p>
+          <div class="btn-group">
+            <a href="#finder-tool" class="btn btn-primary">Start exploring</a>
+            <a href="#how-it-works" class="btn btn-secondary">How this works</a>
+          </div>
+        </div>
+
+        <div class="hero-preview">
+          <h3>What this tool does</h3>
+          <div class="badge-row">
+            <span class="badge">Live data</span>
+            <span class="badge">Educational use</span>
+            <span class="badge">Doctor discussion summary</span>
+          </div>
+          <p class="study-meta">This page queries live ClinicalTrials.gov study records through a Netlify Function and organizes the results in a patient-friendly format.</p>
+          <div class="mini-card">
+            <strong style="display:block; color:var(--navy); margin-bottom:6px;">Location filtering</strong>
+            <span style="color:var(--text-secondary);">Results are filtered using site state information listed in the study record.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how-it-works">
+      <div class="container">
+        <span class="eyebrow">How this tool works</span>
+        <h2 class="section-title">A simple educational flow</h2>
+        <p class="section-subtitle">This tool is designed to help patients understand what studies exist and prepare for better conversations — not to replace medical guidance.</p>
+
+        <div class="how-grid">
+          <article class="step-card">
+            <div class="step-number">1</div>
+            <h3>Choose general filters</h3>
+            <p>Cancer type, biomarkers, prior treatments, and location help organize what studies to explore.</p>
+          </article>
+          <article class="step-card">
+            <div class="step-number">2</div>
+            <h3>Explore studies</h3>
+            <p>Review live study details in a clean, structured format designed for patients and families.</p>
+          </article>
+          <article class="step-card">
+            <div class="step-number">3</div>
+            <h3>Prepare for discussion</h3>
+            <p>Copy or download a summary to review with your doctor.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="finder-tool">
+      <div class="container finder-shell">
+        <aside class="filter-column">
+          <div class="filter-panel">
+            <h3>Explore studies</h3>
+            <p class="helper-text">No results are preloaded. Search when you are ready.</p>
+
+            <div class="field">
+              <label for="cancerType">Cancer type</label>
+              <select id="cancerType">
+                <option value="">Select a cancer type</option>
+                <option>Acute myeloid leukemia</option>
+                <option>Myelodysplastic syndromes</option>
+                <option>Myeloproliferative neoplasms</option>
+                <option>Leukemia</option>
+                <option>Lymphoma</option>
+                <option>Multiple myeloma</option>
+                <option>Breast cancer</option>
+                <option>Lung cancer</option>
+                <option>Colorectal cancer</option>
+                <option>Ovarian cancer</option>
+                <option>Pancreatic cancer</option>
+                <option>Prostate cancer</option>
+                <option>Melanoma</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Biomarkers</label>
+              <div class="chip-group">
+                <button type="button" class="chip" data-type="biomarker" data-value="EGFR">EGFR</button>
+                <button type="button" class="chip" data-type="biomarker" data-value="ALK">ALK</button>
+                <button type="button" class="chip" data-type="biomarker" data-value="KRAS">KRAS</button>
+                <button type="button" class="chip" data-type="biomarker" data-value="BRAF">BRAF</button>
+                <button type="button" class="chip" data-type="biomarker" data-value="HER2">HER2</button>
+                <button type="button" class="chip" data-type="biomarker" data-value="PD-L1">PD-L1</button>
+                <button type="button" class="chip" data-type="biomarker" data-value="FLT3">FLT3</button>
+                <button type="button" class="chip" data-type="biomarker" data-value="IDH1">IDH1</button>
+                <button type="button" class="chip" data-type="biomarker" data-value="IDH2">IDH2</button>
+                <button type="button" class="chip" data-type="biomarker" data-value="TP53">TP53</button>
+                <button type="button" class="chip" data-type="biomarker" data-value="CD19">CD19</button>
+                <button type="button" class="chip" data-type="biomarker" data-value="BCMA">BCMA</button>
+                <button type="button" class="chip" data-type="biomarker" data-value="CD33">CD33</button>
+                <button type="button" class="chip" data-type="biomarker" data-value="JAK2">JAK2</button>
+                <button type="button" class="chip" data-type="biomarker" data-value="CALR">CALR</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Prior treatments</label>
+              <div class="chip-group">
+                <button type="button" class="chip" data-type="treatment" data-value="No prior systemic therapy">No prior systemic therapy</button>
+                <button type="button" class="chip" data-type="treatment" data-value="Prior chemotherapy">Prior chemotherapy</button>
+                <button type="button" class="chip" data-type="treatment" data-value="Prior immunotherapy">Prior immunotherapy</button>
+                <button type="button" class="chip" data-type="treatment" data-value="Prior targeted therapy">Prior targeted therapy</button>
+                <button type="button" class="chip" data-type="treatment" data-value="Prior stem cell transplant">Prior stem cell transplant</button>
+                <button type="button" class="chip" data-type="treatment" data-value="Prior CAR-T">Prior CAR-T</button>
+                <button type="button" class="chip" data-type="treatment" data-value="Prior radiation">Prior radiation</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="stateSelect">State</label>
+              <select id="stateSelect">
+                <option value="">All states</option>
+                <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option>
+                <option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option>
+                <option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option>
+                <option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option>
+                <option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option>
+                <option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option>
+                <option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option>
+                <option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option>
+                <option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option><option>Vermont</option>
+                <option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option>
+              </select>
+              <p class="helper-text">Results are filtered using the study record’s listed site state values.</p>
+            </div>
+
+            <div class="btn-group">
+              <button class="btn btn-primary" id="exploreBtn" type="button">Explore studies</button>
+              <button class="btn btn-ghost" id="clearBtn" type="button">Clear filters</button>
+            </div>
+
+            <div class="disclaimer-box">
+              This tool is for educational purposes only and does not determine eligibility or provide medical advice. Always discuss clinical trial options with your doctor.
+            </div>
+          </div>
+        </aside>
+
+        <section class="results-column">
+          <div class="active-filters" id="activeFilters"></div>
+
+          <div class="results-top">
+            <div>
+              <span class="eyebrow">Results</span>
+              <h2 class="section-title" style="margin-bottom:8px;">Studies to explore</h2>
+              <p class="section-subtitle" style="max-width:unset;">Live results will appear here after you search.</p>
+            </div>
+            <div class="panel" style="padding:16px 18px; border-radius:16px; min-width:180px; text-align:center;">
+              <strong id="resultsCount" style="font-size:28px; color:var(--navy); font-family:'Poppins',sans-serif;">0</strong>
+              <div style="font-size:14px; color:var(--text-secondary);">studies to explore</div>
+            </div>
+          </div>
+
+          <div class="initial-state" id="initialState">
+            <h3 class="section-title" style="margin-bottom:10px;">Ready when you are.</h3>
+            <p class="section-subtitle" style="margin:0 auto;">Choose a cancer type and any optional filters, then click <strong>Explore studies</strong> to search live study records.</p>
+          </div>
+
+          <div class="loading-state" id="loadingState">Searching live ClinicalTrials.gov study records...</div>
+
+          <div class="results-list" id="resultsList"></div>
+
+          <div class="empty-state" id="emptyState">
+            <h3 class="section-title" style="margin-bottom:10px;">No studies matched the filters you selected.</h3>
+            <p class="section-subtitle" style="margin:0 auto;">Try removing one or more filters. Some studies may not list locations or treatment details the way you expect, and broader filters may show more options.</p>
+            <div class="btn-group" style="justify-content:center;">
+              <button class="btn btn-primary" id="emptyClearBtn" type="button">Clear filters</button>
+            </div>
+          </div>
+
+          <p class="location-note">Locations shown here are based on site information available in the ClinicalTrials.gov study record.</p>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3 class="footer-title">My Trial Journey</h3>
+          <p>A patient-centered platform focused on education, understanding, and support throughout the clinical trial journey.</p>
+        </div>
+        <div>
+          <h3 class="footer-title">Explore</h3>
+          <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="learn.html">Learn</a>
+            <a href="app.html">App</a>
+            <a href="webinars.html">Webinars</a>
+          </div>
+        </div>
+        <div>
+          <h3 class="footer-title">Contact</h3>
+          <div class="footer-links">
+            <a href="mailto:hello@mytrialjourney.com">hello@mytrialjourney.com</a>
+            <a href="about.html">About the project</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">© 2026 My Trial Journey. Educational content only. Not medical advice.</div>
+    </div>
+  </footer>
+
+  <script>
+    const appState = {
+      biomarkers: new Set(),
+      treatments: new Set(),
+      hasSearched: false
+    };
+
+    const cancerTypeEl = document.getElementById('cancerType');
+    const stateSelectEl = document.getElementById('stateSelect');
+    const activeFiltersEl = document.getElementById('activeFilters');
+    const resultsListEl = document.getElementById('resultsList');
+    const resultsCountEl = document.getElementById('resultsCount');
+    const emptyStateEl = document.getElementById('emptyState');
+    const initialStateEl = document.getElementById('initialState');
+    const loadingStateEl = document.getElementById('loadingState');
+    const exploreBtn = document.getElementById('exploreBtn');
+
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const type = chip.dataset.type;
+        const value = chip.dataset.value;
+        const bucket = appState[type + 's'];
+        if (bucket.has(value)) {
+          bucket.delete(value);
+          chip.classList.remove('active');
+        } else {
+          bucket.add(value);
+          chip.classList.add('active');
+        }
+      });
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', clearFilters);
+    document.getElementById('emptyClearBtn').addEventListener('click', clearFilters);
+    exploreBtn.addEventListener('click', runSearch);
+
+    function clearFilters() {
+      cancerTypeEl.value = '';
+      stateSelectEl.value = '';
+      appState.biomarkers.clear();
+      appState.treatments.clear();
+      appState.hasSearched = false;
+      document.querySelectorAll('.chip').forEach(chip => chip.classList.remove('active'));
+      activeFiltersEl.innerHTML = '';
+      resultsListEl.innerHTML = '';
+      resultsCountEl.textContent = '0';
+      emptyStateEl.classList.remove('show');
+      loadingStateEl.classList.remove('show');
+      initialStateEl.style.display = 'block';
+      emptyStateEl.querySelector('.section-title').textContent = 'No studies matched the filters you selected.';
+      emptyStateEl.querySelector('.section-subtitle').textContent = 'Try removing one or more filters. Some studies may not list locations or treatment details the way you expect, and broader filters may show more options.';
+    }
+
+    function renderActiveFilters() {
+      activeFiltersEl.innerHTML = '';
+      if (!appState.hasSearched) return;
+      const pills = [];
+      if (cancerTypeEl.value) pills.push(cancerTypeEl.value);
+      if (stateSelectEl.value) pills.push(stateSelectEl.value);
+      [...appState.biomarkers].forEach(value => pills.push(value));
+      [...appState.treatments].forEach(value => pills.push(value));
+      pills.forEach(label => {
+        const el = document.createElement('span');
+        el.className = 'filter-pill';
+        el.textContent = label;
+        activeFiltersEl.appendChild(el);
+      });
+    }
+
+    async function runSearch() {
+      const cancerType = cancerTypeEl.value.trim();
+      if (!cancerType) {
+        alert('Please select a cancer type first.');
+        return;
+      }
+
+      appState.hasSearched = true;
+      renderActiveFilters();
+      initialStateEl.style.display = 'none';
+      emptyStateEl.classList.remove('show');
+      resultsListEl.innerHTML = '';
+      loadingStateEl.classList.add('show');
+      resultsCountEl.textContent = '0';
+      exploreBtn.disabled = true;
+      exploreBtn.textContent = 'Searching...';
+
+      try {
+        const params = new URLSearchParams({
+          cancerType,
+          state: stateSelectEl.value,
+          biomarkers: JSON.stringify([...appState.biomarkers]),
+          treatments: JSON.stringify([...appState.treatments])
+        });
+
+        const response = await fetch(`/api/trials?${params.toString()}`);
+
+if (!response.ok) {
+  throw new Error("API failed");
+}
+        if (!response.ok) {
+          throw new Error('Search request failed');
+        }
+
+        const payload = await response.json();
+        renderResults(payload.studies || []);
+      } catch (error) {
+        resultsListEl.innerHTML = '';
+        emptyStateEl.classList.add('show');
+        emptyStateEl.querySelector('.section-title').textContent = 'Unable to load live studies right now.';
+        emptyStateEl.querySelector('.section-subtitle').textContent = 'Please try again in a moment. If the issue continues, there may be a temporary issue loading live data.';
+      } finally {
+        loadingStateEl.classList.remove('show');
+        exploreBtn.disabled = false;
+        exploreBtn.textContent = 'Explore studies';
+      }
+    }
+
+    function getDiscussionSummary(study) {
+      const locationsText = study.locations.length
+        ? study.locations.map(loc => `${loc.facility}${loc.city || loc.state ? ' — ' : ''}${[loc.city, loc.state].filter(Boolean).join(', ')}`).join('\n')
+        : 'Location information not listed in the study record.';
+
+      return `I found this study on My Trial Journey and would like to discuss with my doctor whether it may be relevant for me.\n\nStudy title: ${study.title}\nNCT ID: ${study.nct}\nPhase: ${study.phase}\nCondition: ${study.condition}\nStatus: ${study.status}\nRecruiting location(s):\n${locationsText}\nClinicalTrials.gov: ${study.url}\n\nMy Trial Journey is an educational tool and does not determine eligibility.`;
+    }
+
+    function downloadSummary(study) {
+      const content = `My Trial Journey\nStudy discussion summary\n\n${getDiscussionSummary(study)}`;
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${study.nct}_study_discussion_summary.txt`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function renderResults(studies) {
+      renderActiveFilters();
+      resultsListEl.innerHTML = '';
+      resultsCountEl.textContent = studies.length;
+      emptyStateEl.classList.toggle('show', studies.length === 0);
+      if (!studies.length) return;
+
+      studies.forEach(study => {
+        const visibleLocations = study.locations.slice(0, 4);
+        const hiddenCount = Math.max(0, study.locations.length - visibleLocations.length);
+        const summaryText = getDiscussionSummary(study);
+
+        const card = document.createElement('article');
+        card.className = 'result-card';
+        card.innerHTML = `
+          <div class="study-header">
+            <div>
+              <h3 class="study-title">${study.title}</h3>
+              <div class="study-meta-grid">
+                <span class="meta-pill">${study.nct}</span>
+                <span class="meta-pill">${study.phase}</span>
+                <span class="meta-pill">${study.condition}</span>
+                <span class="meta-pill status-pill ${/recruiting/i.test(study.status) ? 'recruiting' : ''}">${study.status}</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="study-summary">${study.summary}</p>
+
+          <div class="locations-block">
+            <div class="locations-title">Site location(s) listed in the study record</div>
+            <div class="locations-list">
+              ${visibleLocations.length ? visibleLocations.map(loc => `<div>${loc.facility}${loc.city || loc.state ? ' — ' : ''}${[loc.city, loc.state].filter(Boolean).join(', ')}</div>`).join('') : '<div>No location information listed.</div>'}
+              ${hiddenCount > 0 ? `<div>+${hiddenCount} more location${hiddenCount > 1 ? 's' : ''}</div>` : ''}
+            </div>
+          </div>
+
+          <div class="actions-row">
+            <button class="btn btn-primary discuss-btn" type="button">Prepare to discuss with your doctor</button>
+            <a class="btn btn-secondary" href="${study.url}" target="_blank" rel="noopener noreferrer">View on ClinicalTrials.gov</a>
+          </div>
+
+          <div class="discussion-panel">
+            <h4>Study discussion summary</h4>
+            <div class="summary-box"></div>
+            <div class="summary-actions">
+              <button class="btn btn-primary copy-btn" type="button">Copy text</button>
+              <button class="btn btn-secondary download-btn" type="button">Download summary</button>
+              <button class="btn btn-ghost close-btn" type="button">Close</button>
+            </div>
+          </div>
+        `;
+
+        const panel = card.querySelector('.discussion-panel');
+        const summaryBox = card.querySelector('.summary-box');
+        summaryBox.textContent = summaryText;
+
+        card.querySelector('.discuss-btn').addEventListener('click', () => panel.classList.add('open'));
+        card.querySelector('.close-btn').addEventListener('click', () => panel.classList.remove('open'));
+        card.querySelector('.download-btn').addEventListener('click', () => downloadSummary(study));
+        card.querySelector('.copy-btn').addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(summaryText);
+            const btn = card.querySelector('.copy-btn');
+            btn.textContent = 'Copied';
+            setTimeout(() => { btn.textContent = 'Copy text'; }, 1400);
+          } catch {
+            alert('Unable to copy automatically in this browser.');
+          }
+        });
+
+        resultsListEl.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>
